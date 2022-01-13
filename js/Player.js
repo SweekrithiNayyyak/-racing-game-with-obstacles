@@ -4,6 +4,7 @@ class Player {
     this.index = null;
     this.positionX = 0;
     this.positionY = 0;
+   
   }
 
   addPlayer() {
@@ -19,11 +20,21 @@ class Player {
       name: this.name,
       positionX: this.positionX,
       positionY: this.positionY,
+      
     });
   }
- 
 
-  //Bp
+  getDistance() {
+    var playerIndex = "players/player" + this.index;
+
+    playerDistanceRef=database.ref(playerIndex)
+    playerDistanceRef.on("value", data => {
+      var data = data.val();
+      this.positionX = data.positionX;
+      this.positionY = data.positionY;
+    });
+  }
+
   getCount() {
     var playerCountRef = database.ref("playerCount");
     playerCountRef.on("value", data => {
@@ -31,16 +42,21 @@ class Player {
     });
   }
 
-  //Bp
   updateCount(count) {
     database.ref("/").update({
       playerCount: count
     });
   }
 
- 
+  update() {
+    var playerIndex = "players/player" + this.index;
+    database.ref(playerIndex).update({
+      positionX: this.positionX,
+      positionY: this.positionY,
+    
+    });
+  }
 
-  //Bp
   static getPlayersInfo() {
     var playerInfoRef = database.ref("players");
     playerInfoRef.on("value", data => {
